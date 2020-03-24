@@ -1,6 +1,6 @@
 import AuthLayout from '../layouts/auth'
-import useInput from '../hooks/useInput'
 import Form from '../components/Form'
+import useInput from '../hooks/useInput'
 import { apiURL } from '../constants/api'
 
 export default () => {
@@ -20,24 +20,32 @@ export default () => {
         name: 'password',
         placeholder: '************'
       })
+    },
+    {
+      label: '🔐 Password (again)',
+      input: useInput({
+        type: 'password',
+        name: 'repeated-password',
+        placeholder: '************'
+      })
     }
   ]
 
   const actions = [
     {
       type: 'submit',
-      text: 'Log in',
-      loadingText: 'Logging in ...'
+      text: 'Register',
+      loadingText: 'Registering ...'
     }
   ]
 
   return (
-    <AuthLayout title='Login'>
-      NestCMS | Login
+    <AuthLayout title='Register'>
+      NestCMS | Register
       <Form
         fields={formFields}
         actions={actions}
-        defaultActionURL={`${apiURL}/login`}
+        defaultActionURL={`${apiURL}/register`}
       />
     </AuthLayout>
   )

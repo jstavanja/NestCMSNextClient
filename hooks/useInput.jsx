@@ -11,5 +11,5 @@ export default ({ type, name, placeholder }) => {
       type={type}
     />
   )
-  return [value, input]
+  return [value, input, name]
 }
