@@ -1,24 +1,27 @@
-import { useState } from 'react'
-import { success } from 'fake-promise-util'
+import { useObserver } from 'mobx-react'
+import { useContext } from 'react'
 
 import Button from './Button'
+import AuthStore from '../stores/authStore'
 
-export default ({ fields, actions = [], defaultActionURL }) => {
-  const [loading, setLoading] = useState(false)
-  const onFormSubmit = async e => {
-    setLoading(true)
-    e.preventDefault()
-    const fieldsAndValues = fields.reduce((currentObject, { input }) => {
-      const [value, , name] = input
-      currentObject[name] = value
-      return currentObject
-    }, {})
-    console.log(fieldsAndValues)
-    console.log(defaultActionURL)
-    await success('Test', 2000)
-    setLoading(false)
+export default ({ fields, actions = [] }) => {
+  const authStore = useContext(AuthStore)
+
+  const onFormSubmit = onClickCallback => {
+    return event => {
+      event.preventDefault()
+      const fieldsAndValues = fields.reduce((currentObject, { input }) => {
+        const [value, , name] = input
+        currentObject[name] = value
+        return currentObject
+      }, {})
+      if (onClickCallback) {
+        onClickCallback(fieldsAndValues)
+      }
+    }
   }
-  return (
+
+  return useObserver(() => (
     <>
       <form>
         {/* Render form fields */}
@@ -34,13 +37,13 @@ export default ({ fields, actions = [], defaultActionURL }) => {
         })}
 
         {/* Render form buttons */}
-        {actions.map(({ type, text, loadingText, onClick }) => {
+        {actions.map(({ type, text, loadingText, onClickCallback }) => {
           return (
             <Button
               key={text}
               type={type}
-              text={loading ? loadingText : text}
-              onClick={onClick ? onClick : onFormSubmit}
+              text={authStore.inProgress ? loadingText : text}
+              onClick={onFormSubmit(onClickCallback)}
             />
           )
         })}
@@ -83,5 +86,5 @@ export default ({ fields, actions = [], defaultActionURL }) => {
         }
       `}</style>
     </>
-  )
+  ))
 }
