@@ -3,7 +3,6 @@ import authService from '../services/auth'
 import { userStore } from './userStore'
 import { commonStore } from './commonStore'
 import { createContext } from 'react'
-import { success } from 'fake-promise-util'
 
 class AuthStore {
   @observable inProgress = false

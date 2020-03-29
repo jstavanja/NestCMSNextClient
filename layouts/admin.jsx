@@ -1,10 +1,28 @@
-import React, { useContext } from 'react'
 import Head from 'next/head'
 
+import Header from '../components/Header'
 import UserStore from '../stores/userStore'
 import { observe } from 'mobx'
+import { useContext, useEffect } from 'react'
+import Router from 'next/router'
+import { commonStore } from '../stores/commonStore'
 
 export default ({ children, title }) => {
+  const userStore = useContext(UserStore)
+
+  useEffect(() => {
+    if (!commonStore.token) {
+      Router.push('/login')
+    }
+  })
+
+  observe(userStore, 'currentUser', ({ newValue }) => {
+    const currentUser = newValue
+    if (!currentUser) {
+      Router.push('/login')
+    }
+  })
+
   return (
     <div>
       <Head>
@@ -14,6 +32,8 @@ export default ({ children, title }) => {
           rel='stylesheet'
         ></link>
       </Head>
+
+      <Header />
 
       {children}
 

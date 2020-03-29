@@ -1,9 +1,36 @@
+import { useEffect, useContext } from 'react'
+
 import AuthLayout from '../layouts/auth'
 import Form from '../components/Form'
 import useInput from '../hooks/useInput'
 import { apiURL } from '../constants/api'
+import UserStore from '../stores/userStore'
+import CommonStore from '../stores/commonStore'
+import { observe } from 'mobx'
+import Router from 'next/router'
 
 export default () => {
+  const userStore = useContext(UserStore)
+  const commonStore = useContext(CommonStore)
+
+  const pullUser = async () => {
+    if (commonStore.token) {
+      await userStore.pullUser()
+      await commonStore.setAppLoaded()
+    }
+  }
+
+  useEffect(() => {
+    pullUser()
+  })
+
+  observe(userStore, 'currentUser', ({ newValue }) => {
+    const currentUser = newValue
+    if (currentUser) {
+      Router.push('/admin')
+    }
+  })
+
   const formFields = [
     {
       label: '👩‍💻 Username',
