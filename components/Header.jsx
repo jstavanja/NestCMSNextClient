@@ -4,7 +4,7 @@ import AuthStore from '../stores/authStore'
 import UserStore from '../stores/userStore'
 import { useContext } from 'react'
 import { observer } from 'mobx-react'
-import Link from 'next/link'
+import Link from '../components/Link'
 
 export default observer(() => {
   const authStore = useContext(AuthStore)
@@ -58,6 +58,9 @@ export default observer(() => {
         a {
           color: black;
           text-decoration: none;
+        }
+        a.link-active {
+          border-bottom: 2px solid #2cc2a3;
         }
       `}</style>
     </>

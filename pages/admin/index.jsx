@@ -17,9 +17,20 @@ const Home = () => {
 
   useEffect(() => {
     pullUser()
-  })
+  }, [])
 
-  return <AdminLayout>Welcome to the admin panel.</AdminLayout>
+  return (
+    <>
+      <AdminLayout title='Dashboard'>
+        <div className='page-content'>Welcome to the admin panel.</div>
+      </AdminLayout>
+      <style jsx>{`
+        .page-content {
+          padding: 50px;
+        }
+      `}</style>
+    </>
+  )
 }
 
 export default Home
