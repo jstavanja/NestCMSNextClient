@@ -2,13 +2,26 @@ import Button from '../components/Button'
 import Logo from '../components/Logo'
 import AuthStore from '../stores/authStore'
 import UserStore from '../stores/userStore'
-import { useContext } from 'react'
+import CommonStore from '../stores/commonStore'
+import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react'
 import Link from '../components/Link'
 
 export default observer(() => {
   const authStore = useContext(AuthStore)
   const userStore = useContext(UserStore)
+  const commonStore = useContext(CommonStore)
+
+  const pullUser = async () => {
+    if (commonStore.token) {
+      await userStore.pullUser()
+      await commonStore.setAppLoaded()
+    }
+  }
+
+  useEffect(() => {
+    pullUser()
+  }, [])
 
   return (
     <>
@@ -18,6 +31,9 @@ export default observer(() => {
           <div className='navigation-items'>
             <Link href='/admin'>
               <a>Home</a>
+            </Link>
+            <Link href='/admin/pages'>
+              <a>Pages</a>
             </Link>
           </div>
         </div>
@@ -33,9 +49,8 @@ export default observer(() => {
       </div>
       <style jsx>{`
         .navigation {
-          padding: 10px;
+          padding: 20px;
           display: flex;
-          text-transform: uppercase;
           align-items: center;
           justify-content: space-between;
           border-bottom: 1px solid rgba(0, 0, 0, 0.25);
@@ -46,6 +61,7 @@ export default observer(() => {
         }
         .navigation-items {
           margin-left: 50px;
+          text-transform: uppercase;
           font-size: 2rem;
         }
         .greeting {
@@ -58,6 +74,7 @@ export default observer(() => {
         a {
           color: black;
           text-decoration: none;
+          margin-left: 40px;
         }
         a.link-active {
           border-bottom: 2px solid #2cc2a3;

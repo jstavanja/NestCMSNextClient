@@ -7,7 +7,7 @@ import { useContext, useEffect } from 'react'
 import Router from 'next/router'
 import { commonStore } from '../stores/commonStore'
 
-export default ({ children, title }) => {
+const AdminLayout = ({ children, title }) => {
   const userStore = useContext(UserStore)
 
   useEffect(() => {
@@ -46,3 +46,5 @@ export default ({ children, title }) => {
     </div>
   )
 }
+
+export default AdminLayout

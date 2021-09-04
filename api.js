@@ -1,7 +1,23 @@
 import ky from 'ky-universal'
 import { apiURL } from './constants/api'
+import { LOCAL_STORAGE_JWT_TOKEN_KEY } from './constants/auth'
 
-export default ky.extend({
-  prefixUrl: apiURL,
-  throwHttpErrors: false
-})
+const createApi = () => {
+  const config = {
+    prefixUrl: apiURL,
+    throwHttpErrors: false,
+  }
+
+  if (typeof window !== 'undefined') {
+    // Check whether we are on the client-side
+    const savedJWT = window.localStorage.getItem(LOCAL_STORAGE_JWT_TOKEN_KEY)
+
+    config.headers = {
+			authorization: `Bearer ${savedJWT}`
+		}
+  }
+
+  return ky.extend(config)
+}
+
+export default createApi()
