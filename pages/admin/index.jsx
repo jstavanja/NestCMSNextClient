@@ -1,28 +1,15 @@
-import { useContext, useEffect } from 'react'
-
+import { observer } from 'mobx-react';
+import { useContext } from 'react';
 import AdminLayout from '../../layouts/admin'
-import UserStore from '../../stores/userStore'
-import CommonStore from '../../stores/commonStore'
+import UserStore from '../../stores/userStore';
 
-const Home = () => {
+const Home = observer(() => {
   const userStore = useContext(UserStore)
-  const commonStore = useContext(CommonStore)
-
-  const pullUser = async () => {
-    if (commonStore.token) {
-      await userStore.pullUser()
-      await commonStore.setAppLoaded()
-    }
-  }
-
-  useEffect(() => {
-    pullUser()
-  }, [])
 
   return (
     <>
       <AdminLayout title='Dashboard'>
-        <div className='page-content'>Welcome to the admin panel.</div>
+        <div className='page-content'>Welcome to the admin panel, {userStore?.currentUser?.username}!</div>
       </AdminLayout>
       <style jsx>{`
         .page-content {
@@ -31,6 +18,6 @@ const Home = () => {
       `}</style>
     </>
   )
-}
+})
 
 export default Home
