@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import Button from './Button'
 import AuthStore from '../stores/authStore'
 
-export default ({ fields, actions = [] }) => {
+const Form = ({ fields, actions = [] }) => {
   const authStore = useContext(AuthStore)
 
   const onFormSubmit = onClickCallback => {
@@ -87,4 +87,6 @@ export default ({ fields, actions = [] }) => {
       `}</style>
     </>
   ))
-}
+};
+
+export default Form;

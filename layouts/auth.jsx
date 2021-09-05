@@ -4,7 +4,7 @@ import Head from 'next/head'
 import UserStore from '../stores/userStore'
 import { observe } from 'mobx'
 
-export default ({ children, title }) => {
+const Auth = ({ children, title }) => {
   return (
     <div>
       <Head>
@@ -25,4 +25,6 @@ export default ({ children, title }) => {
       `}</style>
     </div>
   )
-}
+};
+
+export default Auth;

@@ -9,7 +9,7 @@ import AuthStore from '../stores/authStore'
 import UserStore from '../stores/userStore'
 import CommonStore from '../stores/commonStore'
 
-export default () => {
+const Login = () => {
   const authStore = useContext(AuthStore)
   const userStore = useContext(UserStore)
   const commonStore = useContext(CommonStore)
@@ -68,4 +68,6 @@ export default () => {
       <Form fields={formFields} actions={actions} />
     </AuthLayout>
   )
-}
+};
+
+export default Login;

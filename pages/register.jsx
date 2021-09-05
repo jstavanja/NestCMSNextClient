@@ -9,7 +9,7 @@ import CommonStore from '../stores/commonStore'
 import { observe } from 'mobx'
 import Router from 'next/router'
 
-export default () => {
+const Register = () => {
   const userStore = useContext(UserStore)
   const commonStore = useContext(CommonStore)
 
@@ -76,4 +76,6 @@ export default () => {
       />
     </AuthLayout>
   )
-}
+};
+
+export default Register;
