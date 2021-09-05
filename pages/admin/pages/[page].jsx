@@ -3,6 +3,12 @@ import { useState, useEffect } from 'react';
 import AdminLayout from '../../../layouts/admin'
 import { show as fetchPage, update as editPage } from '../../../services/pages'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Button } from '@chakra-ui/button';
+import { Container, VStack } from '@chakra-ui/layout';
+import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/form-control';
+import { Input } from '@chakra-ui/input';
+import { Textarea } from '@chakra-ui/textarea';
+import { Checkbox } from '@chakra-ui/checkbox';
 
 const PageEdit = () => {
 
@@ -51,39 +57,55 @@ const PageEdit = () => {
 
 	return (
 		<>
-		<AdminLayout title={`Edit page ${title}`}>
-			<div className="page-content">
-				{
-					pageDataFetched &&
-					<Formik
-						initialValues={{ title, content, isPublished }}	
-						validate={validatePageEditForm}
-						onSubmit={submitPageEditForm}
-					>
-						{({ isSubmitting }) => (
-							<Form>
-								<label htmlFor="title">Title</label>
-								<Field type="text" name="title"></Field>
-								<ErrorMessage name="title" component="div" />
-								<label htmlFor="content">Title</label>
-								<Field as="textarea" name="content"></Field>
-								<ErrorMessage name="content" component="div" />
-								<label htmlFor="isPublished">Is published</label>
-								<Field type="checkbox" name="isPublished" />
-								<button type="submit" disabled={isSubmitting}>
-									Edit
-								</button>
-							</Form>
-						)}
-					</Formik>
-				}
-			</div>
-		</AdminLayout>
-		<style jsx>{`
-			.page-content {
-				padding: 50px;
-			}
-		`}</style>
+			<AdminLayout title={`Edit page ${title}`}>
+				<Container>
+					{
+						pageDataFetched &&
+						<Formik
+							initialValues={{ title, content, isPublished }}	
+							validate={validatePageEditForm}
+							onSubmit={submitPageEditForm}
+						>
+							{({ isSubmitting }) => (
+								<Form>
+									<VStack>
+										<Field type="text" name="title">
+											{({ field, form }) => (
+												<FormControl isInvalid={form.errors.title && form.touched.title}>
+													<FormLabel htmlFor="title">Title</FormLabel>
+													<Input {...field} id="title" placeholder="Title" />
+													<FormErrorMessage>{form.errors.title}</FormErrorMessage>
+												</FormControl>
+											)}
+										</Field>
+										<Field type="textarea" name="content">
+											{({ field, form }) => (
+												<FormControl isInvalid={form.errors.content && form.touched.content}>
+													<FormLabel htmlFor="content">Content</FormLabel>
+													<Textarea {...field} id="content" name="content" />
+													<FormErrorMessage>{form.errors.content}</FormErrorMessage>
+												</FormControl>
+											)}
+										</Field>
+										<Field type="checkbox" name="isPublished">
+											{({ field, form }) => (
+												<FormControl isInvalid={form.errors.content && form.touched.content}>
+													<FormLabel htmlFor="content">Is published</FormLabel>
+													<Checkbox {...field} id="is_published" name="is_published" />
+													<FormErrorMessage>{form.errors.isPublished}</FormErrorMessage>
+												</FormControl>
+											)}
+										</Field>
+										<Button type="submit" isLoading={isSubmitting}>
+											Edit
+										</Button>
+									</VStack>
+								</Form>
+							)}
+						</Formik>
+					}
+				</Container>
+			</AdminLayout>
 		</>
 	)
 }
