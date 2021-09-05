@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
-import api from '../../../api';
 import AdminLayout from '../../../layouts/admin'
 import Link from '../../../components/Link'
-import { PATHS } from '../../../constants/api';
 import { index as fetchPages, destroy as deletePage } from '../../../services/pages'
+import { Container, Flex, Heading, VStack } from '@chakra-ui/layout';
+import { Button } from '@chakra-ui/button';
+import PageInfo from '../../../components/PageInfo'
 
 const PageIndex = () => {
 
   const [pages, setPages] = useState([])
+  
   useEffect(() => {
     async function fetchPagesData() {
       const pages = await fetchPages()
@@ -17,33 +19,19 @@ const PageIndex = () => {
     fetchPagesData()
   }, [])
 
-  const handleDeletePage = async (pageId) => {
-    await deletePage(pageId)
-  }
-
   return (
     <>
       <AdminLayout title='Pages Dashboard'>
-        <div className='page-content'>
-          <h1>Pages editor</h1>
+        <Container>
           <Link href='pages/create'>
-            <button type='button'>Create new page</button>
+            <Button size="sm" mt="10px">Create new page</Button>
           </Link>
-
-          {
-            pages.map(page => (
-              <ul key={page.id}>
-                <li>
-                  <h3>{page.title}</h3>
-                  <div className='actions'>
-                    <Link href={'pages/'+page.id}><button>Edit</button></Link>
-                    <button onClick={() => handleDeletePage(page.id)}>Delete</button>
-                  </div>
-                </li>
-              </ul>
-            ))
-          }
-        </div>
+          <VStack align="stretch" as="ul" mt="20px">
+            {
+              pages.map(page => (<PageInfo key={page.id} as='li' page={page}/>))
+            }
+          </VStack>
+        </Container>
       </AdminLayout>
       <style jsx>{`
         .page-content {
