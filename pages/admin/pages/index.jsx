@@ -37,7 +37,7 @@ const PageIndex = () => {
                   <h3>{page.title}</h3>
                   <div className='actions'>
                     <Link href={'pages/'+page.id}><button>Edit</button></Link>
-                    <button onClick={() => deletePage(page.id)}>Delete</button>
+                    <button onClick={() => handleDeletePage(page.id)}>Delete</button>
                   </div>
                 </li>
               </ul>
