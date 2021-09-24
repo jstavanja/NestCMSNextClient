@@ -5,7 +5,7 @@ import { LOCAL_STORAGE_JWT_TOKEN_KEY } from './constants/auth'
 const createApi = () => {
   const config = {
     prefixUrl: apiURL,
-    throwHttpErrors: false,
+    throwHttpErrors: true,
   }
 
   if (typeof window !== 'undefined') {
@@ -17,7 +17,7 @@ const createApi = () => {
 		}
   }
 
-  return ky.extend(config)
+  return ky.create(config)
 }
 
 export default createApi()
