@@ -10,6 +10,7 @@ import { Input } from '@chakra-ui/input';
 import { Textarea } from '@chakra-ui/textarea';
 import { Checkbox } from '@chakra-ui/checkbox';
 import Link from '../../../components/Link';
+import { useToast } from '@chakra-ui/toast';
 
 const PageEdit = () => {
 
@@ -18,6 +19,8 @@ const PageEdit = () => {
 	const [permalink, setPermalink] = useState('')
 	const [isPublished, setIsPublished] = useState('')
 	const [pageDataFetched, setPageDataFetched] = useState(false)
+
+	const toast = useToast()
 
 	const router = useRouter()
 
@@ -56,6 +59,14 @@ const PageEdit = () => {
 		const response = await editPage(router.query.page, values)
 
 		setSubmitting = false
+
+		toast({
+			title: "Page edited.",
+			description: "The page was successfully edited.",
+			status: "success",
+			duration: 3000,
+			isClosable: true,
+		})
 	}
 
 	return (

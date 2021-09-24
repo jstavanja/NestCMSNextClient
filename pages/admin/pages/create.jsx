@@ -8,10 +8,12 @@ import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/form-contro
 import { Input } from '@chakra-ui/input';
 import { Textarea } from '@chakra-ui/textarea';
 import { Checkbox } from '@chakra-ui/checkbox';
+import { useToast } from '@chakra-ui/toast';
 import { useRouter } from 'next/router';
 
 const PageCreate = () => {
 
+	const toast = useToast()
 	const router = useRouter()
 
 	const validatePageCreateForm = values => {
@@ -31,6 +33,16 @@ const PageCreate = () => {
 	const submitPageCreateForm = async (values, { setSubmitting }) => {
 		await createPage(values)
 		setSubmitting = false
+
+		toast({
+			title: "Page created.",
+			description: "The page was successfully created.",
+			status: "success",
+			duration: 3000,
+			isClosable: true,
+		})
+
+		router.push('../pages')
 	}
 
 	return (
