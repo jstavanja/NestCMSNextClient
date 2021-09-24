@@ -5,7 +5,7 @@ import { Container, VStack } from '@chakra-ui/layout';
 import { Button } from '@chakra-ui/button';
 import PageInfo from '../../../components/PageInfo'
 import { observer } from 'mobx-react';
-import PagesStore from '../../../stores/admin/pagesStore';
+import PagesStore from '../../../stores/pagesStore';
 
 const PageIndex = observer(() => {
 

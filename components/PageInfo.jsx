@@ -4,7 +4,7 @@ import { destroy as deletePage } from '../services/pages'
 import { Button } from '@chakra-ui/button';
 import { PATHS } from '../constants/api';
 import { useContext } from 'react';
-import PagesStore from '../stores/admin/pagesStore';
+import PagesStore from '../stores/pagesStore';
 import { useToast } from '@chakra-ui/toast';
 
 const PageInfo = ({ as, page: {id, title, permalink, content}}) => {

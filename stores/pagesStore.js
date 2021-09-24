@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx'
 import { createContext } from 'react'
-import { index as fetchPages, destroy as deletePage } from '../../services/pages'
+import { index as fetchPages, destroy as deletePage } from '../services/pages'
 
 class PagesStore {
 	@observable pages = []
