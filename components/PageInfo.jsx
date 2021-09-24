@@ -1,6 +1,5 @@
-import { Box, HStack, Flex, VStack } from '@chakra-ui/layout'
+import { Box, HStack } from '@chakra-ui/layout'
 import Link from './Link'
-import { destroy as deletePage } from '../services/pages'
 import { Button } from '@chakra-ui/button';
 import { PATHS } from '../constants/api';
 import { useContext } from 'react';
@@ -8,19 +7,30 @@ import PagesStore from '../stores/pagesStore';
 import { useToast } from '@chakra-ui/toast';
 
 const PageInfo = ({ as, page: {id, title, permalink, content}}) => {
+
 	const pagesStore = useContext(PagesStore)
 	const toast = useToast()
 
 	const handleDeletePage = async (pageId) => {
-		await pagesStore.deletePage(pageId)
-
-		toast({
-			title: "Page deleted.",
-			description: "The page was successfully deleted.",
-			status: "success",
-			duration: 3000,
-			isClosable: true,
-		})
+		try {
+			await pagesStore.deletePage(pageId)
+			
+			toast({
+				title: "Page deleted.",
+				description: "The page was successfully deleted.",
+				status: "success",
+				duration: 3000,
+				isClosable: true,
+			})
+		} catch (error) {
+			toast({
+				title: "Failed to delete page.",
+				description: `The page cannot be deleted. Try again later. Reason: ${error.message}`,
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+			})	
+		}
 	}
 
 	return (

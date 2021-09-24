@@ -6,21 +6,13 @@ class PagesStore {
 	@observable pages = []
 
 	@action async fetchPages() {
-		try {
-			const pages = await fetchPages()
-			this.pages = pages
-		} catch (error) {
-			console.info('Something went wrong when trying to fetch all pages from the server.', error)
-		}
+		const pages = await fetchPages()
+		this.pages = pages
 	}
 
 	@action async deletePage(pageId) {
-		try {
-			await deletePage(pageId)
-			this.pages = this.pages.filter((page) => page.id !== pageId)
-		} catch (error) {
-			console.info('Something went wrong when trying to delete a page')
-		}
+		await deletePage(pageId)
+		this.pages = this.pages.filter((page) => page.id !== pageId)
 	}
 }
 

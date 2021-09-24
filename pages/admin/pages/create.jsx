@@ -31,18 +31,28 @@ const PageCreate = () => {
 	} 
 
 	const submitPageCreateForm = async (values, { setSubmitting }) => {
-		await createPage(values)
-		setSubmitting = false
+		try {
+			await createPage(values)
+			setSubmitting = false
 
-		toast({
-			title: "Page created.",
-			description: "The page was successfully created.",
-			status: "success",
-			duration: 3000,
-			isClosable: true,
-		})
+			toast({
+				title: "Page created.",
+				description: "The page was successfully created.",
+				status: "success",
+				duration: 3000,
+				isClosable: true,
+			})
 
-		router.push('../pages')
+			router.push('../pages')
+		} catch (error) {
+			toast({
+				title: "Failed to create page.",
+				description: `The page cannot be created at this moment. Try again later. Reason: ${error.message}`,
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+			})	
+		}
 	}
 
 	return (

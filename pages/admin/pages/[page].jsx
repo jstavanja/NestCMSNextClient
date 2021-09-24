@@ -56,17 +56,27 @@ const PageEdit = () => {
 	const submitPageEditForm = async (values, { setSubmitting }) => {
 		if (!router.query) return
 
-		const response = await editPage(router.query.page, values)
+		try {
+			await editPage(router.query.page, values)
 
-		setSubmitting = false
+			setSubmitting = false
 
-		toast({
-			title: "Page edited.",
-			description: "The page was successfully edited.",
-			status: "success",
-			duration: 3000,
-			isClosable: true,
-		})
+			toast({
+				title: "Page edited.",
+				description: "The page was successfully edited.",
+				status: "success",
+				duration: 3000,
+				isClosable: true,
+			})
+		} catch (error) {
+			toast({
+				title: "Failed to edit page.",
+				description: `The page cannot be edited at this moment. Try again later. Reason: ${error.message}`,
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+			})	
+		}
 	}
 
 	return (
