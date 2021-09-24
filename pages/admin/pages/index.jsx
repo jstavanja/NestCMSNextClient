@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import AdminLayout from '../../../layouts/admin'
 import Link from '../../../components/Link'
-import { index as fetchPages, destroy as deletePage } from '../../../services/pages'
-import { Container, Flex, Heading, VStack } from '@chakra-ui/layout';
+import { Container, VStack } from '@chakra-ui/layout';
 import { Button } from '@chakra-ui/button';
 import PageInfo from '../../../components/PageInfo'
+import { observer } from 'mobx-react';
+import PagesStore from '../../../stores/admin/pagesStore';
 
-const PageIndex = () => {
+const PageIndex = observer(() => {
 
-  const [pages, setPages] = useState([])
-  
+  const pagesStore = useContext(PagesStore)
+
+  const fetchPages = async () => {
+    await pagesStore.fetchPages()
+  }
+
   useEffect(() => {
-    async function fetchPagesData() {
-      const pages = await fetchPages()
-      setPages(pages)
-    }
-
-    fetchPagesData()
+    fetchPages()
   }, [])
 
   return (
@@ -28,7 +28,7 @@ const PageIndex = () => {
           </Link>
           <VStack align="stretch" as="ul" mt="20px">
             {
-              pages.map(page => (<PageInfo key={page.id} as='li' page={page}/>))
+              pagesStore.pages.map(page => (<PageInfo key={page.id} as='li' page={page}/>))
             }
           </VStack>
         </Container>
@@ -40,6 +40,6 @@ const PageIndex = () => {
       `}</style>
     </>
   )
-}
+})
 
 export default PageIndex
