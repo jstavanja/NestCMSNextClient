@@ -1,71 +1,118 @@
-import { useContext, useEffect } from 'react'
-import { observe } from 'mobx'
-import Router from 'next/router'
-
+import { useContext, useState } from 'react'
 import AuthLayout from '../layouts/auth'
-import useInput from '../hooks/useInput'
-import Form from '../components/Form'
 import AuthStore from '../stores/authStore'
-import UserStore from '../stores/userStore'
-import CommonStore from '../stores/commonStore'
+import { Container, VStack } from '@chakra-ui/layout';
+import { useRouter } from 'next/router';
+import { Field, Form, Formik } from 'formik';
+import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/form-control';
+import { Input, InputGroup, InputRightElement } from '@chakra-ui/input';
+import { Button } from '@chakra-ui/button';
+import { useToast } from '@chakra-ui/toast';
 
-const Login = () => {
+const Login = () => {  
   const authStore = useContext(AuthStore)
-  const userStore = useContext(UserStore)
-  const commonStore = useContext(CommonStore)
+  const router = useRouter()
+  
+  const [showPassword, setShowPassword] = useState(false)
+  const toast = useToast()
 
-  const pullUser = async () => {
-    if (commonStore.token) {
-      await userStore.pullUser()
-      await commonStore.setAppLoaded()
-    }
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword)
   }
 
-  useEffect(() => {
-    pullUser()
-  })
+  const validateLoginForm = values => {
+		const errors = {};
 
-  observe(userStore, 'currentUser', ({ newValue }) => {
-    const currentUser = newValue
-    if (currentUser) {
-      Router.push('/admin')
-    }
-  })
+		if (!values.username) {
+			errors.username = 'Required'
+		}
 
-  const formFields = [
-    {
-      label: '👩‍💻 Username',
-      input: useInput({
-        type: 'text',
-        name: 'username',
-        placeholder: 'JohnDoe'
-      })
-    },
-    {
-      label: '🔐 Password',
-      input: useInput({
-        type: 'password',
-        name: 'password',
-        placeholder: '************'
-      })
-    }
-  ]
+		if (!values.password) {
+			errors.password = 'Required'
+		}
+		
+		return errors;
+	} 
 
-  const actions = [
-    {
-      type: 'submit',
-      text: 'Log in',
-      loadingText: 'Logging in ...',
-      onClickCallback: ({ username, password }) => {
-        authStore.login(username, password)
-      }
-    }
-  ]
+  const submitLoginForm = async (values, { setSubmitting }) => {
+    setSubmitting = true
+
+		try {
+			await authStore.login(values.username, values.password)
+
+			toast({
+				title: "Login success.",
+				description: "You've been successfully logged in.",
+				status: "success",
+				duration: 3000,
+				isClosable: true,
+			})
+
+      router.push('/admin')
+		} catch (error) {
+			toast({
+				title: "Login failed.",
+				description: `Failed to log in. Reason: ${error.message}`,
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+			})	
+		}
+
+    setSubmitting = false
+	}
 
   return (
     <AuthLayout title='Login'>
       NestCMS | Login
-      <Form fields={formFields} actions={actions} />
+      <Container>
+        <Formik
+          initialValues={{ username: '', password: '' }}
+          validate={validateLoginForm}
+          onSubmit={submitLoginForm}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <VStack>
+                <Field type="text" name="username">
+                  {({ field, form }) => (
+                    <FormControl isInvalid={form.errors.username && form.touched.username}>
+                      <FormLabel htmlFor="username">Username</FormLabel>
+                      <Input {...field} id="username" placeholder="JohnDoe" />
+                      <FormErrorMessage>{form.errors.username}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+                <Field type="password" name="password">
+                  {({ field, form }) => (
+                    <FormControl isInvalid={form.errors.password && form.touched.password}>
+                      <FormLabel htmlFor="password">Password</FormLabel>
+                      <InputGroup
+                       size="md">
+                        <Input
+                          {...field} id="password" 
+                          pr="4.5rem"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Enter password"
+                        />
+                        <InputRightElement width="4.5rem">
+                          <Button h="1.75rem" size="sm" onClick={toggleShowPassword}>
+                            {showPassword ? "Hide" : "Show"}
+                          </Button>
+                        </InputRightElement>
+                      </InputGroup>
+                      <FormErrorMessage>{form.errors.password}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+                <Button type="submit" isLoading={isSubmitting}>
+                  Log in
+                </Button>
+              </VStack>
+            </Form>
+            )}
+          </Formik>
+      </Container>
     </AuthLayout>
   )
 };
