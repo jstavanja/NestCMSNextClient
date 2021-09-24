@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export default ({ type, name, placeholder }) => {
+const useInput = ({ type, name, placeholder }) => {
   const [value, setValue] = useState('')
   const input = (
     <input
@@ -13,3 +13,5 @@ export default ({ type, name, placeholder }) => {
   )
   return [value, input, name]
 }
+
+export default useInput;
