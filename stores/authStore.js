@@ -39,7 +39,7 @@ class AuthStore {
     this.errors = undefined
 
     try {
-      const { token } = await authService.register(username, email, password)
+      const { token } = await authService.register(username, email, password).json()
       commonStore.setToken(token)
       userStore.pullUser()
     } catch (err) {
