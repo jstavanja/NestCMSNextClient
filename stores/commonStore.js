@@ -4,10 +4,14 @@ import { createContext } from 'react'
 import { LOCAL_STORAGE_JWT_TOKEN_KEY } from '../constants/auth'
 
 class CommonStore {
-  @observable token = window.localStorage.getItem(LOCAL_STORAGE_JWT_TOKEN_KEY)
+  @observable token = null
   @observable appLoaded = false
 
   constructor() {
+    if (typeof window !== 'undefined') {
+      this.token = window.localStorage.getItem(LOCAL_STORAGE_JWT_TOKEN_KEY)
+    }
+
     reaction(
       () => this.token,
       token => {
