@@ -11,6 +11,7 @@ import { Textarea } from '@chakra-ui/textarea';
 import { Checkbox } from '@chakra-ui/checkbox';
 import Link from '../../../components/Link';
 import { useToast } from '@chakra-ui/toast';
+import * as Yup from 'yup';
 
 const PageEdit = () => {
 
@@ -39,19 +40,10 @@ const PageEdit = () => {
 		fetchPageData()
 	}, [router.isReady])
 
-	const validatePageEditForm = values => {
-		const errors = {};
-
-		if (!values.title) {
-			errors.title = 'Required'
-		}
-
-		if (values.isPublished == null) {
-			errors.isPublished = 'Required'
-		}
-		
-		return errors;
-	} 
+	const editPageValidationSchema = Yup.object().shape({
+		title: Yup.string().required("Required"),
+		permalink: Yup.string().required("Required"),
+	});
 
 	const submitPageEditForm = async (values, { setSubmitting }) => {
 		if (!router.query) return
@@ -91,7 +83,7 @@ const PageEdit = () => {
 							pageDataFetched &&
 							<Formik
 								initialValues={{ title, content, permalink, isPublished }}	
-								validate={validatePageEditForm}
+								validationSchema={editPageValidationSchema}
 								onSubmit={submitPageEditForm}
 							>
 								{({ isSubmitting }) => (

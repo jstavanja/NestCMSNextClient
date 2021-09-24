@@ -1,6 +1,6 @@
 import AdminLayout from '../../../layouts/admin'
 import { store as createPage } from '../../../services/pages'
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import { Container, VStack } from '@chakra-ui/layout';
 import Link from '../../../components/Link';
 import { Button } from '@chakra-ui/button';
@@ -10,25 +10,17 @@ import { Textarea } from '@chakra-ui/textarea';
 import { Checkbox } from '@chakra-ui/checkbox';
 import { useToast } from '@chakra-ui/toast';
 import { useRouter } from 'next/router';
+import * as Yup from 'yup';
 
 const PageCreate = () => {
 
 	const toast = useToast()
 	const router = useRouter()
 
-	const validatePageCreateForm = values => {
-		const errors = {};
-
-		if (!values.title) {
-			errors.title = 'Required'
-		}
-
-		if (!values.permalink) {
-			errors.permalink = 'Required'
-		}
-		
-		return errors;
-	} 
+	const createPageValidationSchema = Yup.object().shape({
+		title: Yup.string().required("Required"),
+		permalink: Yup.string().required("Required"),
+	});
 
 	const submitPageCreateForm = async (values, { setSubmitting }) => {
 		try {
@@ -65,7 +57,7 @@ const PageCreate = () => {
 					<Container mt="20px">
 						<Formik
 							initialValues={{ title: '', content: '', permalink: '', isPublished: true }}
-							validate={validatePageCreateForm}
+							validationSchema={createPageValidationSchema}
 							onSubmit={submitPageCreateForm}
 						>
 							{({ isSubmitting }) => (

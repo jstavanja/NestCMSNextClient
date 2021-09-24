@@ -8,6 +8,7 @@ import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/form-contro
 import { Input, InputGroup, InputRightElement } from '@chakra-ui/input';
 import { Button } from '@chakra-ui/button';
 import { useToast } from '@chakra-ui/toast';
+import * as Yup from 'yup';
 
 const Login = () => {  
   const authStore = useContext(AuthStore)
@@ -20,19 +21,10 @@ const Login = () => {
     setShowPassword(!showPassword)
   }
 
-  const validateLoginForm = values => {
-		const errors = {};
-
-		if (!values.username) {
-			errors.username = 'Required'
-		}
-
-		if (!values.password) {
-			errors.password = 'Required'
-		}
-		
-		return errors;
-	} 
+  const loginFormValidationSchema = Yup.object().shape({
+    username: Yup.string().required("Required"),
+    password: Yup.string().required("Required"),
+  });
 
   const submitLoginForm = async (values, { setSubmitting }) => {
     setSubmitting = true
@@ -68,7 +60,7 @@ const Login = () => {
       <Container>
         <Formik
           initialValues={{ username: '', password: '' }}
-          validate={validateLoginForm}
+          validationSchema={loginFormValidationSchema}
           onSubmit={submitLoginForm}
         >
           {({ isSubmitting }) => (
