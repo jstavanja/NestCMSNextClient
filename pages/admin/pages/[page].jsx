@@ -15,6 +15,7 @@ const PageEdit = () => {
 
 	const [title, setTitle] = useState('')
 	const [content, setContent] = useState('')
+	const [permalink, setPermalink] = useState('')
 	const [isPublished, setIsPublished] = useState('')
 	const [pageDataFetched, setPageDataFetched] = useState(false)
 
@@ -24,9 +25,10 @@ const PageEdit = () => {
 		if (!router.isReady) return;
 
 		async function fetchPageData() {
-			const { title, content, isPublished } = await fetchPage(router?.query?.page)
+			const { title, content, permalink, isPublished } = await fetchPage(router?.query?.page)
 			setTitle(title)
 			setContent(content)
+			setPermalink(permalink)
 			setIsPublished(isPublished)
 			setPageDataFetched(true)
 		}
@@ -67,7 +69,7 @@ const PageEdit = () => {
 						{
 							pageDataFetched &&
 							<Formik
-								initialValues={{ title, content, isPublished }}	
+								initialValues={{ title, content, permalink, isPublished }}	
 								validate={validatePageEditForm}
 								onSubmit={submitPageEditForm}
 							>
@@ -80,6 +82,15 @@ const PageEdit = () => {
 														<FormLabel htmlFor="title">Title</FormLabel>
 														<Input {...field} id="title" placeholder="Title" />
 														<FormErrorMessage>{form.errors.title}</FormErrorMessage>
+													</FormControl>
+												)}
+											</Field>
+											<Field type="text" name="permalink">
+												{({ field, form }) => (
+													<FormControl isInvalid={form.errors.permalink && form.touched.permalink}>
+														<FormLabel htmlFor="permalink">Permalink (slug)</FormLabel>
+														<Input {...field} id="permalink" placeholder="page_slug" />
+														<FormErrorMessage>{form.errors.permalink}</FormErrorMessage>
 													</FormControl>
 												)}
 											</Field>
