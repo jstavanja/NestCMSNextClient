@@ -1,4 +1,25 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/zeit/next.js/tree/canary/packages/create-next-app).
+
+# NestCMS client
+
+## NestCMS
+
+This is the repository containing all of the frontend code necessary to run NestCMS. NestCMS is a simple content management system build with NestJS on the backend and React (Next.js) on the frontend.
+
+![Pages dashboard inside NestCMS](docs/pages_dashboard.png)
+
+This repository houses the frontend code which connects to the backend code of the [NestCMS server](https://github.com/jstavanja/NestCMSServer).
+
+## Installation
+
+Node version 14+ is required to run this project.
+
+To install the dependencies, run the following command:
+
+```bash
+npm install
+# or
+yarn
+```
 
 ## Getting Started
 
@@ -10,21 +31,13 @@ npm run dev
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result. Make sure, your backend code is also running on the correct port.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Interesting notes
 
-## Learn More
+The pages on the frontend are statically generated during the app build time, which means that full server-side rendering support is available.
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Stay in touch
 
-You can check out [the Next.js GitHub repository](https://github.com/zeit/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on ZEIT Now
-
-The easiest way to deploy your Next.js app is to use the [ZEIT Now Platform](https://zeit.co/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Author - [Jaka Stavanja](https://stavanja.xyz)
