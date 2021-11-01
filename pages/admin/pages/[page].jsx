@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
 import AdminLayout from '../../../layouts/admin'
-import { show as fetchPage, update as editPage } from '../../../services/pages'
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { update as editPage } from '../../../services/pages'
+import { Formik, Form, Field } from 'formik';
 import { Button } from '@chakra-ui/button';
 import { Container, VStack } from '@chakra-ui/layout';
 import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/form-control';
@@ -12,33 +11,15 @@ import { Checkbox } from '@chakra-ui/checkbox';
 import Link from '../../../components/Link';
 import { useToast } from '@chakra-ui/toast';
 import * as Yup from 'yup';
+import { usePage } from '../../../hooks/usePage';
 
 const PageEdit = () => {
-
-	const [title, setTitle] = useState('')
-	const [content, setContent] = useState('')
-	const [permalink, setPermalink] = useState('')
-	const [isPublished, setIsPublished] = useState('')
-	const [pageDataFetched, setPageDataFetched] = useState(false)
 
 	const toast = useToast()
 
 	const router = useRouter()
 
-	useEffect(() => {
-		if (!router.isReady) return;
-
-		async function fetchPageData() {
-			const { title, content, permalink, isPublished } = await fetchPage(router?.query?.page)
-			setTitle(title)
-			setContent(content)
-			setPermalink(permalink)
-			setIsPublished(isPublished)
-			setPageDataFetched(true)
-		}
-
-		fetchPageData()
-	}, [router.isReady])
+	const { page, isLoading, isError } = usePage(router.isReady ? router.query.page : null);
 
 	const editPageValidationSchema = Yup.object().shape({
 		title: Yup.string().required("Required"),
@@ -73,16 +54,22 @@ const PageEdit = () => {
 
 	return (
 		<>
-			<AdminLayout title={`Edit page ${title}`}>
+			<AdminLayout title={`Edit page ${page?.title || ''}`}>
 				<Container mt="40px">
 					<Link href='../pages'>
 						<Button size="sm">&lt;- Back to the list of pages</Button>
 					</Link>
 					<Container mt="20px">
 						{
-							pageDataFetched &&
+							isLoading && <p>Page is loading ...</p>
+						}
+						{
+							isError && <p>Something went wrong while fetching the page.</p>
+						}
+						{
+							page &&
 							<Formik
-								initialValues={{ title, content, permalink, isPublished }}	
+								initialValues={{ title: page.title, content: page.content, permalink: page.permalink, isPublished: page.isPublished }}	
 								validationSchema={editPageValidationSchema}
 								onSubmit={submitPageEditForm}
 							>
